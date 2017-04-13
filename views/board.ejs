@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+<head>
+	<% include inner/_meta %>
+	<link rel="stylesheet" href="/css/basic.css" />
+	<link rel="stylesheet" href="/css/board.css" />
+	<title><%= BOARD_ID %></title>
+	<script>
+		var BOARD_ID = '<%= BOARD_ID %>'; 
+	</script>
+	<script src="/js/userstorage.js"></script>
+</head>
+<body>
+	
+	<h1 title>@<%= BOARD_ID %></h1>
+	<p intro>0v0</p>
+
+	<form class="send-box" style="font-size: 0;">
+		<input id="m" autocomplete="off" />
+		<button id="to-send">Send</button>
+	</form>
+	
+	<ul id="messages"></ul>
+
+	<script src="/js/socket.io-1.4.5.js"></script>
+	<script src="/js/jquery-3.1.0.min.js"></script>
+	<script src="/js/msg.js"></script>
+	<script>
+		var user = us.getUser(); 
+		var msg = new Msg(user); 
+
+		console.log(user);
+
+		var where = window.location.origin.toString() + '/' + BOARD_ID; 
+		var chat = io.connect(where); 
+
+		$('#to-send').click(function(){
+			var toSend = $('#m').val(); 
+
+			chat.emit('message', msg.mk(toSend));
+
+			$('#m').val(''); 
+			return false;
+		});
+
+		function addItem(data){
+			// var toAdd = $('<li>').text(data.text).attr('username', data.user.user); 
+
+			var str = `
+				<li username="${data.user.user}">
+					<img src="${data.user.img}" class="ava" />
+					<div class="content">
+						<span class="whosay">
+							${data.user.user}
+						</span>
+						<span class="text">
+							${data.text}
+						</span>
+					</div>
+				</li>
+			`; 
+			var toAdd = $(str); 
+
+
+			$('#messages').prepend(toAdd);
+		}
+
+		chat.on('message', function(data){
+			console.log(data); 
+
+			
+			addItem(data); 
+
+		});
+
+		chat.on('history', function(msgArr){
+			var temp; 
+			console.log(msgArr); 
+
+			msgArr.forEach(function(e){
+				// $('#messages').prepend($('<li>').text(e.text));
+				addItem(e); 
+			})
+		});
+	</script>
+</body>
+</html>

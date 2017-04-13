@@ -1,0 +1,13 @@
+/*text.css*/
+[title] {
+
+}
+
+[intro] {
+
+}
+
+[title] + [intro] {
+	color: #AAA;
+	font-size: 10px;
+}
