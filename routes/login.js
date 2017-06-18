@@ -33,7 +33,8 @@ router.post('/', function(req, res, next){
 				code: 200,
 				data: {
 					auth: auth.generate(),
-					user: req.body.id
+					user: req.body.id,
+					info: auth.getUser(req.body.id)
 				},
 				msg: '登录成功'
 			}); 
