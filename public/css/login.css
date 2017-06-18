@@ -1,0 +1,33 @@
+/*login.css*/
+#to-login {
+	margin: 1rem 0;
+	margin-left: -1em; 
+	padding: 1.6em 1em;
+	border-left: 1px solid #BBB;
+
+	/*border-radius: 0 0 0 30px;*/
+}
+
+#to-login input {
+	display: block;
+	margin: 1em 0; 
+	padding: .4em .6em; 
+	
+	border: 1px solid #CCC; 
+	border-radius: 2px; 
+}
+
+#to-login button {
+	display: block;
+	font-size: 16px; 
+	background-color: #07A; 
+	border: none; 
+	padding: .5em 1em; 
+	border-radius: 2px; 
+	color: #FFF; 
+}
+
+.info {
+	font-size: .4rem; 
+	padding-left: .1em; 
+}

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<% include inner/_meta %>
+	<title>Register</title>
+	<link rel="stylesheet" href="/css/basic.css" />
+	<link rel="stylesheet" href="/css/text.css" />
+	<link rel="stylesheet" href="/css/login.css" />
+	<link rel="stylesheet" href="/css/hover-imagine.css">
+	<script src="/js/userstorage.js"></script>
+</head>
+<body>
+	<h1>注册</h1>
+	<p class="intro">Nep 帐号</p>
+	<form id="to-login" action="/register" method="post">
+		<p class="info"><%= msg %></p>
+		<input id="id" placeholder="Your Name" name="id" type="text" />
+		<input id="pwd" placeholder="***" name="pwd" type="password" />
+		<button type="submit">register</button>
+	</form>
+</body>
+</html>

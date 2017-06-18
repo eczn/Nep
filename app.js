@@ -9,7 +9,9 @@ var all = require('./routes/all');
 var index = require('./routes/index');
 var users = require('./routes/users');
 var login = require('./routes/login'); 
+var register = require('./routes/register');
 var board = require('./routes/board'); 
+
 
 var app = express();
 
@@ -30,6 +32,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(all);
 app.use('/', index);
 app.use('/login', login); 
+app.use('/register', register); 
 app.use('/users', users);
 app.use('/board', board);
 
