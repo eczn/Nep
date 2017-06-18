@@ -7,13 +7,22 @@
   },
   "dependencies": {
     "body-parser": "~1.17.1",
+    "colors": "^1.1.2",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.3",
     "ejs": "~2.5.6",
     "express": "~4.15.2",
+    "highlight.js": "^9.12.0",
+    "markdown-it": "^8.3.1",
+    "markdown-it-implicit-figures": "^0.6.0",
+    "markdown-it-sub": "^1.0.0",
+    "markdown-it-sup": "^1.0.0",
+    "markdown-it-table-of-contents": "^0.3.2",
+    "markdown-it-toc-and-anchor": "^4.1.2",
     "md5": "^2.2.1",
     "morgan": "~1.8.1",
     "serve-favicon": "~2.4.2",
-    "socket.io": "^1.7.3"
+    "socket.io": "^1.7.3",
+    "then-fs": "^2.0.0"
   }
 }

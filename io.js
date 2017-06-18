@@ -51,6 +51,8 @@ var IO = {};
 
 module.exports = IO
 
+var md = require('./nepping/md'); 
+
 IO.todo = function(io){
 	var ioList = boardList.map((boardItem) => {
 		var board = io
@@ -59,13 +61,14 @@ IO.todo = function(io){
 		board.on('connection', function(socket){
 			console.log('FIND CONNECTION!'); 
 			
-
 			socket.emit('history', boardItem.msgs);
 
 			socket.on('message', function(msg){
-				console.log('message: ' + msg);
-				boardItem.msgs.push(msg); 
+				msg.text = md.render(msg.text); 
 
+				console.log('message: ' + msg);
+
+				boardItem.msgs.push(msg); 
 				board.emit('message', msg);
 			});
 		});

@@ -4,6 +4,7 @@
 	<% include inner/_meta %>
 	<link rel="stylesheet" href="/css/basic.css" />
 	<link rel="stylesheet" href="/css/board.css" />
+	<link rel="stylesheet" href="/css/mark-vally.css">
 	<title><%= BOARD_ID %></title>
 	<script>
 		var BOARD_ID = '<%= BOARD_ID %>'; 
@@ -16,18 +17,27 @@
 	<p intro>0v0</p>
 
 	<form class="send-box" style="font-size: 0;">
-		<input id="m" autocomplete="off" />
-		<button id="to-send">Send</button>
+		<textarea id="m" autocomplete="off"></textarea>
+		<button blue id="to-send">Send</button>
 	</form>
 	
-	<ul id="messages"></ul>
+	<div class="box"> <!-- relative -->
+		<img src="path/to/your/picture" />
+		
+		<!-- absolute -->
+		<img src="path/to/your/icon">
+	</div>
+
+	<ul id="messages" class="md"></ul>
 
 	<script src="/js/socket.io-1.4.5.js"></script>
 	<script src="/js/jquery-3.1.0.min.js"></script>
+	<script type="text/javascript" src="/js/Parser.js"></script>
 	<script src="/js/msg.js"></script>
 	<script>
 		var user = us.getUser(); 
 		var msg = new Msg(user); 
+		var md = new HyperDown; 
 
 		console.log(user);
 
@@ -45,16 +55,22 @@
 
 		function addItem(data){
 			// var toAdd = $('<li>').text(data.text).attr('username', data.user.user); 
+			let info = data.user.info; 
+
+			console.log(data)
 
 			var str = `
-				<li username="${data.user.user}">
-					<img src="${data.user.img}" class="ava" />
-					<div class="content">
+				<li username="${info.id}">
+					<div class="msg-header">
+						<img src="${info.head}" class="ava" />
 						<span class="whosay">
-							${data.user.user}
+
+							${info.id}
 						</span>
+					</div>
+					<div class="content">
 						<span class="text">
-							${data.text}
+							${ data.text }
 						</span>
 					</div>
 				</li>
@@ -75,7 +91,7 @@
 
 		chat.on('history', function(msgArr){
 			var temp; 
-			console.log(msgArr); 
+			console.log('HISTORY', msgArr); 
 
 			msgArr.forEach(function(e){
 				// $('#messages').prepend($('<li>').text(e.text));

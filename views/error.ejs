@@ -1,3 +1,24 @@
-<h1><%= message %></h1>
-<h2><%= error.status %></h2>
-<pre><%= error.stack %></pre>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<% include inner/_meta %>
+	<title>Login</title>
+	<link rel="stylesheet" href="/css/basic.css" />
+	<link rel="stylesheet" href="/css/text.css" />
+	<link rel="stylesheet" href="/css/login.css" />
+	<link rel="stylesheet" href="/css/hover-imagine.css">
+	<script src="/js/userstorage.js"></script>
+</head>
+<style>
+	pre {
+		overflow-x: scroll;
+		background-color: #222;
+		color: #FFF;
+	}
+</style>
+<body>
+	<h1><%= message %></h1>
+	<h2><%= error.status %></h2>
+	<pre><%= error.stack %></pre>
+</body>
+</html>

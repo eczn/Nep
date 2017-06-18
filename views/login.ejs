@@ -3,6 +3,10 @@
 <head>
 	<% include inner/_meta %>
 	<title>Login</title>
+	<link rel="stylesheet" href="/css/basic.css" />
+	<link rel="stylesheet" href="/css/text.css" />
+	<link rel="stylesheet" href="/css/login.css" />
+	<link rel="stylesheet" href="/css/hover-imagine.css">
 	<script src="/js/userstorage.js"></script>
 </head>
 <body>
@@ -10,10 +14,12 @@
 	<p class="intro"><%= msg %></p>
 
 	<form id="to-login" action="/login" method="post">
-		<input id="id" name="id" type="text" />
-		<input id="pwd" name="pwd" type="password" />
+		<input id="id" placeholder="Your Name" name="id" type="text" />
+		<input id="pwd" placeholder="***" name="pwd" type="password" />
 		<button type="submit">Login</button>
 	</form>
+
+	<p>没有帐号？</p> <a href="/register">注册 Nep 帐号</a>
 
 	<script src="/js/jquery-3.1.0.min.js"></script>
 	<script src="/js/userstorage.js"></script>
