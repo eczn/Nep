@@ -25,3 +25,40 @@ body {
 a {
 	color: #40B7FF;
 }
+
+button[blue] {
+	/*font-size: 1rem; */
+	background-color: #07A; 
+	border: none; 
+	padding: .5em 1em; 
+	border-radius: 2px; 
+	color: #FFF; 
+}
+
+::selection {
+    color: #FFF;
+    background-color: #C6BCBB;
+}
+
+/* 滚动条 */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 16px;
+    background-color: #AAA;
+}
+
+/* 轨道 */  
+::-webkit-scrollbar-track {
+    /*box-shadow: 0 0 20px 0 rgba(0,0,0,.5);*/
+    background-color: #E0E0E0;
+}
+
+/* 定义滑块 */
+::-webkit-scrollbar-thumb {
+    /*box-shadow: 0 0 6px 0 rgba(0,0,0,.5);*/
+    background-color: #AAA;
+}  
+
+body > h1 {
+	font-size: .6rem;
+}
