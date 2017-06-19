@@ -32,7 +32,7 @@ router.post('/', function(req, res, next){
 			res.json({
 				code: 200,
 				data: {
-					auth: auth.generate(),
+					auth: auth.generate(req.body.id),
 					user: req.body.id,
 					info: auth.getUser(req.body.id)
 				},
