@@ -8,10 +8,12 @@
 	<title>Nep - Chatting</title>
 </head>
 <body>
-	<h1 title>Welcome to Nep</h1>
+	<h1 title>Hi <%= req.nepUser.id %>, Welcome to Nep</h1>
 	<p intro>An Chatting Board By Socket.IO</p>
-	
-	<a href="/login/clear">logout</a>
+		
+	<a href="/profile">Profile</a>
+	<a href="/login/clear">Logout</a>
+
 	
 	<ul class="board-list">
 		<% BOARD_LIST.forEach((item, idx, its)=>{ %>
