@@ -49,6 +49,8 @@ var boardList = [
 
 var IO = {}; 
 
+var auth = require('./nepping/auth'); 
+
 module.exports = IO
 
 var md = require('./nepping/md'); 
@@ -63,8 +65,13 @@ IO.todo = function(io){
 			
 			socket.emit('history', boardItem.msgs);
 
+			// On Msg 
 			socket.on('message', function(msg){
 				msg.text = md.render(msg.text); 
+				let userInfo = msg.user.info; 
+
+				// 更新 
+				userInfo.head = auth.getUser(userInfo.id).head; 
 
 				console.log('message: ' + msg);
 
