@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+	<% include inner/_meta %>
+	<link rel="stylesheet" href="/css/basic.css" />
+	<link rel="stylesheet" href="/css/text.css" />
+	<link rel="stylesheet" href="/css/login.css" />
+	<link rel="stylesheet" href="/css/profile.css" />
+	<link rel="stylesheet" href="/css/hover-imagine.css">
+	<title>Nep - Profile</title>
+</head>
+<body>
+	<h1 title><%= req.nepUser.id %>'s Profile</h1>
+	<p intro>Editting</p>
+		
+	<a href="/profile">Profile</a>
+	<a href="/login/clear">Logout</a>
+	
+	<div class="user">
+		<img src="<%= req.nepUser.head %>" alt="" />
+
+		<form action="/profile/upload" method="post" enctype="multipart/form-data">
+			<input name="img" type="file" />
+			<button type="submit" class="upload" blue>Upload</button>
+		</form>
+	</div>
+
+
+	<footer>Profile</footer>
+	<script src="/js/jquery-3.1.0.min.js"></script>
+</body>
+</html>
