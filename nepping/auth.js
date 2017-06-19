@@ -16,6 +16,8 @@ var saveUserList = () => {
 	return db.save('userList', userList); 
 }
 
+
+
 // module.exports 
 var auth = {}; 
 module.exports = auth; 
@@ -23,6 +25,8 @@ module.exports = auth;
 
 // 空函数 
 function _blankFunc(){}
+
+auth.saveUserList = saveUserList; 
 
 // 检验 
 auth.verify = function(user, cb){
@@ -38,14 +42,21 @@ auth.getUser = id => {
 	return userList.filter(user => user.id === id)[0]
 }
 
+auth.getUserByCookie = cookieAuth => {
+	return authList.filter(e => e.auth === cookieAuth)[0]; 
+}
+
 // md5 生成器 
-auth.generate = function(){
+auth.generate = function(id){
 	let temp = new Date(); 
 	temp = temp.toString() + Math.random().toString(); 
 
 	let md5Value = md5(temp); 
 
-	authList.unshift(md5Value); 
+	authList.unshift({
+		auth: md5Value,
+		id: id
+	}); 
 	return md5Value; 
 }
 
@@ -53,10 +64,16 @@ auth.generate = function(){
 auth.check = function(cookieAuth, cb){
 	cb = cb || _blankFunc; 
 
-	// cb(true); 
+	let flag = authList.some(e => {
+		return cookieAuth === e.auth; 
+	})
+	let user; 
+
+	if (flag) user = this.getUser(this.getUserByCookie(cookieAuth).id)
+
 	cb(authList.some(e => {
-		return cookieAuth === e; 
-	}));
+		return cookieAuth === e.auth; 
+	}), user);
 }
 
 // 登出 
@@ -64,7 +81,7 @@ auth.logout = function(cookieAuth, cb){
 	cb = cb || _blankFunc; 
 	let bo = true; 
 	authList = authList.filter(e => {
-		let temp = (e!== cookieAuth); 
+		let temp = (e.auth !== cookieAuth); 
 		bo = bo & temp; 
 		return temp; 
 	});
