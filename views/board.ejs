@@ -5,16 +5,20 @@
 	<link rel="stylesheet" href="/css/basic.css" />
 	<link rel="stylesheet" href="/css/board.css" />
 	<link rel="stylesheet" href="/css/mark-vally.css">
-	<title><%= BOARD_ID %></title>
+	<title>Nep Channel: <%= BOARD_ID %></title>
 	<script>
 		var BOARD_ID = '<%= BOARD_ID %>'; 
 	</script>
 	<script src="/js/userstorage.js"></script>
 </head>
 <body>
-	
-	<h1 title>@<%= BOARD_ID %></h1>
-	<p intro>0v0</p>
+	<header>
+		<a href="/"><svg class="back" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#556" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+			<polyline points="15 18 9 12 15 6"/>
+		</svg>
+		<h1 class="back-text">Back</h1></a>
+		<h1 style="line-height: 1rem;" title>@<%= BOARD_ID %></h1>
+	</header>
 
 	<form class="send-box" style="font-size: 0;">
 		<textarea id="m" autocomplete="off"></textarea>
@@ -22,13 +26,26 @@
 	</form>
 	
 	<div class="box"> <!-- relative -->
-		<img src="path/to/your/picture" />
+		<label for="file-input">
+			<svg class="image" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#556" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+				<rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+				<circle cx="8.5" cy="8.5" r="1.5"/>
+				<polyline points="21 15 16 10 5 21"/>
+			</svg>
+		</label>
+
+		<svg class="clock" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#556" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+			<circle cx="12" cy="12" r="10"/>
+			<polyline points="12 6 12 12 15 15"/>
+		</svg>
 		
-		<!-- absolute -->
-		<img src="path/to/your/icon">
 	</div>
 
 	<ul id="messages" class="md"></ul>
+	
+	<div style="display: none;">
+		<input id="file-input" type="file" />
+	</div>
 
 	<script src="/js/socket.io-1.4.5.js"></script>
 	<script src="/js/jquery-3.1.0.min.js"></script>
@@ -36,6 +53,7 @@
 	<script>
 		var user = us.getUser(); 
 		var msg = new Msg(user); 
+		var imgMsg = new ImgMsg(user); 
 
 		console.log(user);
 
@@ -54,8 +72,6 @@
 		function addItem(data){
 			// var toAdd = $('<li>').text(data.text).attr('username', data.user.user); 
 			let info = data.user.info; 
-
-			console.log(data)
 
 			var str = `
 				<li username="${info.id}">
@@ -79,12 +95,37 @@
 			$('#messages').prepend(toAdd);
 		}
 
+		function addImg(data){
+			let info = data.user.info; 
+
+			var str = `
+				<li username="${info.id}">
+					<div class="msg-header">
+						<img src="${info.head}" class="ava" />
+						<span class="whosay">
+
+							${info.id}
+						</span>
+					</div>
+					<div class="content">
+						<img src="${data.img}" />
+					</div>
+				</li>
+			`; 
+			var toAdd = $(str); 
+
+			$('#messages').prepend(toAdd);
+		}
+
 		chat.on('message', function(data){
 			console.log(data); 
 
+			if (data.type === 'plain'){
+				addItem(data); 	
+			} else if (data.type === 'image'){
+				addImg(data); 
+			}
 			
-			addItem(data); 
-
 		});
 
 		chat.on('history', function(msgArr){
@@ -93,9 +134,12 @@
 
 			msgArr.forEach(function(e){
 				// $('#messages').prepend($('<li>').text(e.text));
-				addItem(e); 
+				if (e.type === 'plain') addItem(e); 
+				else if (e.type === 'image') addImg(e); 
 			})
 		});
 	</script>
+
+	<script src="/js/send-img.js"></script>
 </body>
 </html>

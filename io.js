@@ -67,7 +67,10 @@ IO.todo = function(io){
 
 			// On Msg 
 			socket.on('message', function(msg){
-				msg.text = md.render(msg.text); 
+				if (msg.type === 'plain'){
+					msg.text = md.render(msg.text); 	
+				}
+				
 				let userInfo = msg.user.info; 
 
 				// 更新 
