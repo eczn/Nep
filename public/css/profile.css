@@ -2,9 +2,45 @@
 .user {
 	text-align: center; 
 	margin: 1rem 0 2rem; 
+	border-top: 1px solid #BBB;
+	border-bottom: 1px solid #BBB;
+	padding-top: 1em; 
+	padding-bottom: 2em; 
+}
+
+.name {
+	font-size: 1rem; 
+}
+.name-after {
+	color: #BBB;
+	font-size: .4rem; 
 }
 
 .upload {
 	display: block;
 	margin: 0 auto; 
+}
+
+.user img {
+	display: inline-block;
+	width: 280px; 
+	border-radius: 10%; 
+	padding: 1em; 
+	margin-bottom: 4em; 
+	box-shadow: 0 43px 98px -34px rgba(0,0,0,.5); 
+}
+
+#img-choose {
+	opacity: 0; 
+	display: none; 
+}
+
+button, span {
+	font-family: consolas, menlo; 
+	cursor: pointer;
+	transition: background .4s; 
+}
+
+[grey] {
+	background-color: #BBB;
 }

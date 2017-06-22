@@ -11,6 +11,7 @@ html {
 }
 
 body {
+	position: relative;
 	color: #556;
 	max-width: 550px; 
 	margin: 0 auto; 
@@ -26,7 +27,7 @@ a {
 	color: #40B7FF;
 }
 
-button[blue] {
+*[blue] {
 	/*font-size: 1rem; */
 	background-color: #07A; 
 	border: none; 
@@ -59,6 +60,35 @@ button[blue] {
     background-color: #AAA;
 }  
 
-body > h1 {
+* h1 {
 	font-size: .6rem;
+}
+
+header {
+	position: relative;
+	height: 2rem; 
+	box-sizing: border-box;
+	padding: 2em 0; 
+	text-align: right;
+}
+
+header h1 {
+	font-size: 30px;
+}
+
+.back {
+	position: absolute;
+	left: -15px; 
+	top: 0; 
+	height: 100%; 
+	cursor: pointer;
+}
+
+.back-text {
+	position: absolute;
+	left: 35px;
+	top: 0;
+	height: 100%; 
+	line-height: 1.9rem; 
+	color: #556; 
 }

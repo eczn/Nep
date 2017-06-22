@@ -1,6 +1,6 @@
 /*login.css*/
 #to-login {
-	margin: 1rem 0;
+	position: relative;
 	margin-left: -1em; 
 	padding: 1.6em 1em;
 	border-left: 1px solid #BBB;
@@ -25,6 +25,19 @@
 	padding: .5em 1em; 
 	border-radius: 2px; 
 	color: #FFF; 
+}
+
+.login {
+	margin: 1em 0; 
+	padding-bottom: 2em;
+}
+
+.login > * {
+	display: inline-block;
+}
+
+.login svg {
+	margin-right: 1em; 
 }
 
 .info {
