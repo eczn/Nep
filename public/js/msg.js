@@ -7,9 +7,22 @@ function Msg(user){
 	function mk(text){
 		return {
 			user: user, 
-			text: text
+			text: text,
+			type: 'plain'
 		}
 	}
 	
+	this.mk = mk; 
+}
+
+function ImgMsg(user){
+	function mk(base64){
+		return {
+			user: user, 
+			img: base64,
+			type: 'image'
+		}
+	}
+
 	this.mk = mk; 
 }
