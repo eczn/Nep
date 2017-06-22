@@ -10,23 +10,66 @@
 	<title>Nep - Profile</title>
 </head>
 <body>
-	<h1 title><%= req.nepUser.id %>'s Profile</h1>
-	<p intro>Editting</p>
-		
-	<a href="/profile">Profile</a>
-	<a href="/login/clear">Logout</a>
+	<header>
+		<a href="/">
+			<svg class="back" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#556" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+				<polyline points="15 18 9 12 15 6"/>
+			</svg>
+			<h1 class="back-text">Back</h1>
+		</a>
+
+		<h1 style="margin-top: -.2em;"><span class="name"><%= req.nepUser.id %></span><span class="name-after">'s Profile</span></h1>
+		<a href="/profile">Profile</a>
+		<a href="/login/clear">Logout</a>
+	</header>
 	
 	<div class="user">
-		<img src="<%= req.nepUser.head %>" alt="" />
+		<img id="ava" src="<%= req.nepUser.head %>" alt="" />
 
 		<form action="/profile/upload" method="post" enctype="multipart/form-data">
-			<input name="img" type="file" />
-			<button type="submit" class="upload" blue>Upload</button>
+
+			<label for="img-choose">
+				<span blue>Choose</span>
+				<button class="upload-btn" grey class="post" type="submit" blue>Upload</button>
+			</label>
+			<input required id="img-choose" name="img" type="file" />
 		</form>
 	</div>
 
 
 	<footer>Profile</footer>
 	<script src="/js/jquery-3.1.0.min.js"></script>
+	<script>
+		function loadImg(){  
+			var file = $("#img-choose")[0].files[0];  
+			var reader = new FileReader();  
+
+			reader.onload = function(e) {  
+				var imgFile;  
+				// Base64: imgFile 
+				imgFile = e.target.result;  
+				$("#ava").attr('src', imgFile);  
+			};  
+
+			return reader.readAsDataURL(file);  
+		}  
+
+
+		$('#img-choose').change(function(e){
+			loadImg(); 
+
+			$('.upload-btn').css('background-color', '#07A'); 
+		});
+
+		$('form').submit(function(){
+			if ($('#img-choose').val() === ''){
+				alert('请点击 Choose 选择图片'); 
+				return false; 
+			} else {
+
+				return true; 
+			}
+		})
+	</script>
 </body>
 </html>
