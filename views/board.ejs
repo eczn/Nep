@@ -9,6 +9,7 @@
 	<script>
 		var BOARD_ID = '<%= BOARD_ID %>'; 
 	</script>
+	<script src="/js/jump.min.js"></script>
 	<script src="/js/userstorage.js"></script>
 </head>
 <body>
@@ -20,31 +21,40 @@
 		<h1 style="line-height: 1rem;" title>@<%= BOARD_ID %></h1>
 	</header>
 
-	<form class="send-box" style="font-size: 0;">
-		<textarea id="m" autocomplete="off"></textarea>
-		<button blue id="to-send">Send</button>
-	</form>
-	
-	<div class="box"> <!-- relative -->
-		<label for="file-input">
-			<svg class="image" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#556" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-				<rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-				<circle cx="8.5" cy="8.5" r="1.5"/>
-				<polyline points="21 15 16 10 5 21"/>
-			</svg>
-		</label>
-
-		<svg class="clock" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#556" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-			<circle cx="12" cy="12" r="10"/>
-			<polyline points="12 6 12 12 15 15"/>
-		</svg>
+	<div class="input-area">
+		<form class="send-box" style="font-size: 0;">
+			<textarea id="m" autocomplete="off"></textarea>
+		</form>
 		
+		<div class="box"> <!-- relative -->
+			<button blue id="to-send">Send</button>
+
+			<label for="file-input">
+				<svg class="image" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#556" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+					<circle cx="8.5" cy="8.5" r="1.5"/>
+					<polyline points="21 15 16 10 5 21"/>
+				</svg>
+			</label>
+			<label for="any-file">
+				<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#556" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+				    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+				    <polyline points="13 2 13 9 20 9"/>
+				</svg>
+			</label>
+
+			<svg class="clock" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#556" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+				<circle cx="12" cy="12" r="10"/>
+				<polyline points="12 6 12 12 15 15"/>
+			</svg>
+		</div>
 	</div>
 
 	<ul id="messages" class="md"></ul>
-	
+
 	<div style="display: none;">
-		<input id="file-input" type="file" />
+		<input id="file-input" accept="image/gif, image/png, image/jpeg" type="file" />
+		<input id="any-file" type="file" />
 	</div>
 
 	<script src="/js/socket.io-1.4.5.js"></script>
@@ -54,6 +64,7 @@
 		var user = us.getUser(); 
 		var msg = new Msg(user); 
 		var imgMsg = new ImgMsg(user); 
+		var fileMsg = new FileMsg(user); 
 
 		console.log(user);
 
@@ -117,29 +128,70 @@
 			$('#messages').prepend(toAdd);
 		}
 
-		chat.on('message', function(data){
-			console.log(data); 
+		function addFile(data){
+			let info = data.user.info; 
 
+			var str = `
+				<li username="${info.id}">
+					<div class="msg-header">
+						<img src="${info.head}" class="ava" />
+						<span class="whosay">
+
+							${info.id}
+						</span>
+					</div>
+					<div class="content file-content">
+						<a href="${data.file}" target="_blank" download="${data.fileName}">
+							<div class="file-container">
+								<svg class="file-icon" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#556" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+								    <polyline points="13 2 13 9 20 9"/>
+								</svg>
+								<span class="file-name">${data.fileName}</span>
+
+								<svg class="check" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#FFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								    <polyline points="20 6 9 17 4 12"/>
+								</svg>
+							</div>
+						</a>
+					</div>
+				</li>
+			`
+			var toAdd = $(str); 
+
+			$('#messages').prepend(toAdd);
+		}
+
+		function handleClick(){
+
+		}
+
+		chat.on('message', function(data){
 			if (data.type === 'plain'){
 				addItem(data); 	
 			} else if (data.type === 'image'){
 				addImg(data); 
+			} else if (data.type === 'file'){
+				addFile(data); 
 			}
-			
 		});
 
 		chat.on('history', function(msgArr){
 			var temp; 
 			console.log('HISTORY', msgArr); 
 
-			msgArr.forEach(function(e){
-				// $('#messages').prepend($('<li>').text(e.text));
-				if (e.type === 'plain') addItem(e); 
-				else if (e.type === 'image') addImg(e); 
+			msgArr.forEach(function(e, idx){
+				setTimeout(() => {
+					// $('#messages').prepend($('<li>').text(e.text));
+					if (e.type === 'plain') addItem(e); 
+					else if (e.type === 'image') addImg(e); 
+					else if (e.type === 'file') addFile(e); 
+
+				}, idx * 100); 
 			})
 		});
 	</script>
-
 	<script src="/js/send-img.js"></script>
+	<script src="/js/send-file.js"></script>
 </body>
 </html>

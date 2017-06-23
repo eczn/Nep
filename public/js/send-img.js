@@ -1,6 +1,6 @@
 // send-img.js 
-function loadImg(cb){  
-	var file = $("#file-input")[0].files[0];  
+function loadFile(file, cb){  
+	// var file = $("#file-input")[0].files[0];  
 	var reader = new FileReader();  
 
 	// reader.onload = function(e) {  
@@ -19,7 +19,9 @@ function loadImg(cb){
 
 
 $('#file-input').change(function(e){
-	loadImg(function(base64){
+	var file = $("#file-input")[0].files[0];  
+
+	loadFile(file, function(base64){
 
 		chat.emit('message', imgMsg.mk(base64));
 	})

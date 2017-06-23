@@ -26,3 +26,14 @@ function ImgMsg(user){
 
 	this.mk = mk; 
 }
+
+function FileMsg(user){
+	this.mk = base64 => fileName => {
+		return {
+			user: user, 
+			file: base64,
+			fileName: fileName,
+			type: 'file'
+		}
+	}
+}
