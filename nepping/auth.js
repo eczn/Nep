@@ -32,9 +32,11 @@ auth.saveUserList = saveUserList;
 auth.verify = function(user, cb){
 	cb = cb || _blankFunc; 
 
-	cb(userList.some((e)=>{
+	let res = userList.filter((e)=>{
 		return (e.id === user.id) && (e.pwd === user.pwd); 
-	})); 
+	})
+
+	cb(res.length !== 0, res[0]);  
 }
 
 // getUser by id 

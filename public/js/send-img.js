@@ -3,13 +3,6 @@ function loadFile(file, cb){
 	// var file = $("#file-input")[0].files[0];  
 	var reader = new FileReader();  
 
-	// reader.onload = function(e) {  
-	// 	var imgFile;  
-	// 	// Base64: imgFile 
-	// 	imgFile = e.target.result;  
-	// 	$("#ava").attr('src', imgFile);  
-	// };  
-
 	reader.onload = function(e){
 		cb(e.target.result); 
 	} 
@@ -23,7 +16,7 @@ $('#file-input').change(function(e){
 
 	loadFile(file, function(base64){
 
-		chat.emit('message', imgMsg.mk(base64));
+		socket.emit('chatMsg', imgMsg.mk(base64));
 	})
 })
 

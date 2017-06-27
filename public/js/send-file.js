@@ -7,6 +7,6 @@ $('#any-file').change(function(e){
 		let temp = $('#any-file').val()
 		let fileName = temp.slice(temp.lastIndexOf('\\') + 1); 
 
-		chat.emit('message', fileMsg.mk(base64)(fileName));
+		socket.emit('chatMsg', fileMsg.mk(base64)(fileName));
 	})
 })

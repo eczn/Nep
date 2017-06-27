@@ -30,6 +30,7 @@
 .login {
 	margin: 1em 0; 
 	padding-bottom: 2em;
+	text-align: center;
 }
 
 .login > * {
