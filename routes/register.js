@@ -4,7 +4,7 @@ var router = express.Router();
 
 var auth = require('../nepping/auth'); 
 
-/* GET home page. */
+// 
 router.get('/', function(req, res, next) {
 	res.render('register', {
 		msg: 'NepId & Pwd'

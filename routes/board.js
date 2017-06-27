@@ -2,12 +2,11 @@
 var express = require('express');
 var router = express.Router();
 
+// Socket 实例 
 var IO = require('../io'); 
 
-/* GET home page. */
 router.get('/', function(req, res, next) {
-	// console.log(req.query); 
-	
+	// 渲染页面 
 	res.render('board', {
 		BOARD_ID: req.query.BOARD_ID || 'Nep',
 		BOARD_LIST: IO.list

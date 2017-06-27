@@ -6,17 +6,17 @@ var auth = require('../nepping/auth');
 var path = require('path');
 
 let dest = path.join(__dirname, '../', 'public/', 'ava'); 
-console.log(dest)
+
 var upload = multer({ dest: 'public/ava' }); 
 
-
+// 渲染页面 
 router.get('/', function(req, res, next) {
-	console.log(req.nepUser)
 	res.render('profile', {
 		req: req
 	});
 });
 
+// 上传头像接口 
 router.post('/upload', upload.single('img'), (req, res) => {
 	let where = '/ava/' + req.file.filename 
 
