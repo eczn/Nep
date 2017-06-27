@@ -27,7 +27,7 @@ function addItem(data){
 	let info = data.user.info; 
 
 	var str = `
-		<li username="${info.id}">
+		<li username="${info.id}" class="ani-big">
 			<div class="msg-header">
 				<img src="${info.head}" class="ava" />
 				<span class="whosay">

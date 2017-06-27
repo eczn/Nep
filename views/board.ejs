@@ -11,6 +11,12 @@
 	</script>
 	<script src="/js/jump.min.js"></script>
 	<script src="/js/userstorage.js"></script>
+	<style>
+		body {
+			border-radius: 0 0 400px 400px;
+			padding-bottom: 250px;
+		}
+	</style>
 </head>
 <body>
 	<header>
@@ -58,12 +64,23 @@
 		<input id="file-input" accept="image/gif, image/png, image/jpeg" type="file" />
 		<input id="any-file" type="file" />
 	</div>
+	
+	<canvas style="display: none;" id="jclock"></canvas>
 
 	<script src="/js/socket.io-1.4.5.js"></script>
 	<script src="/js/jquery-3.1.0.min.js"></script>
 	<script src="/js/msg.js"></script>
+	<script src="/js/jClock.js"></script>
+	<script>
+		var myClock = new jClock({
+			canvasId: 'jclock', 
+			clockHight: $('body').width(),
+			clockWidth: $('body').width()
+		});
+	</script>
 	<script src="/js/main.js"></script>
 	<script src="/js/send-img.js"></script>
 	<script src="/js/send-file.js"></script>
+	<script src="/js/send-time.js"></script>
 </body>
 </html>
