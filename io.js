@@ -2,31 +2,36 @@
 var fs = require('then-fs'); 
 var path = require('path'); 
 var fileBase = path.join(__dirname, 'public', 'base'); 
+var auth = require('./nepping/auth'); 
 
 var boardList = [
 	{
 		name: 'Nep',
 		img: '/img/001.jpg',
 		intro: 'Nep官方',
-		msgs: []
+		msgs: [],
+		users: []
 	},
 	{
 		name: 'CHEETS',
 		img: '/img/002.jpg',
 		intro: '谈笑风生',
-		msgs: []
+		msgs: [],
+		users: []
 	},
 	{
 		name: '2Chan',
 		img: '/img/003.jpg',
 		intro: '2-Chan',
-		msgs: []
+		msgs: [],
+		users: []
 	},
 	{
 		name: 'PixiX',
 		img: '/img/004.jpg',
 		intro: '座谈',
-		msgs: []
+		msgs: [],
+		users: []
 	}
 ];
 
@@ -42,23 +47,31 @@ IO.todo = function(io) {
 	// 遍历房间列表 
 	var ioList = boardList.map((boardItem) => {
 		// 取得名字 并使用 SocketIO 命名空间
-		var board = io.of(boardItem.name);
+		var IOBoard = io.of(boardItem.name);
 
-		board.on('connection', socket => {
-			console.log('>>>> CONNECTION', boardItem.name); 
-			
+		IOBoard.on('connection', socket => {
+			console.log('\n\n >>>> CONNECTION'.debug, boardItem.name); 
+			// console.log('>>>> SOC', socket); 
+			let SOCKET_ID = socket.id.split('#')[1]; 
+			let user = {};  
+
 			// 发历史消息 
 			socket.emit('history', boardItem.msgs);
+			socket.emit('onlineUsers', boardItem.users.map(user => {
+				user.pwd = ''
+
+				return user; 
+			})); 
 
 			// On Msg 
-			socket.on('message', msg => {
+			socket.on('chatMsg', msg => {
 				let userInfo = msg.user.info; 
 
 				if (msg.type === 'plain'){
 					msg.text = md.render(msg.text);
 					// 更新 
 					userInfo.head = auth.getUser(userInfo.id).head; 
-					board.emit('message', msg);
+					IOBoard.emit('chatMsg', msg);
 					boardItem.msgs.push(msg); 
 
 				} else if (msg.type === 'image'){
@@ -69,7 +82,7 @@ IO.todo = function(io) {
 						msg.img = `/base/${ fileName }`; 
 
 						// 触发 压栈 
-						board.emit('message', msg); 
+						IOBoard.emit('chatMsg', msg); 
 						boardItem.msgs.push(msg); 
 					})
 				} else if (msg.type === 'file'){
@@ -79,14 +92,41 @@ IO.todo = function(io) {
 					this.base64ToDisk(datas[1], msg.fileName).then(fileName => {
 						msg.file = `/base/${ fileName }`; 
 
-						board.emit('message', msg); 
+						IOBoard.emit('chatMsg', msg); 
 						boardItem.msgs.push(msg);
 					})
 				}
 			});
+
+			socket.on('control', msg => {
+
+				if (msg.type === 'login'){
+					auth.verify(msg.info, (suc, userInAuth) => {
+						if (suc) {
+							let temp = {
+								id: userInAuth.id, 
+								head: userInAuth.head
+							}
+
+							boardItem.users.push(temp); 
+							user = temp
+							IOBoard.emit('chatConnect', userInAuth); 
+						} else {
+							socket.send('登录失败, 请刷新重试'); 
+						}
+					})
+				}
+			})
+
+			socket.on('disconnect', reason => {
+				IOBoard.emit('chatDisconnect', user); 
+				boardItem.users = boardItem.users.filter(e => e.id !== user.id); 
+			})
 		});
 
-		return board; 
+
+
+		return IOBoard; 
 	}); 
 }
 
