@@ -3,10 +3,17 @@ var msg = new Msg(user);
 var imgMsg = new ImgMsg(user); 
 var fileMsg = new FileMsg(user); 
 
-console.log(user);
+console.groupCollapsed(
+	` %c [${new Date().toLocaleTimeString()}] UserStorage Ready `,
+	`background: rgb(64, 64, 64);color: #DDD;`
+)
+	console.log(user); 
+console.groupEnd();
 
-var where = window.location.origin.toString() + '/' + BOARD_ID; 
-var socket = io(where);
+// var where = window.location.origin.toString() + '/' + BOARD_ID; 
+
+var socket = io('127.0.0.1:3333');
+socket.nsp = '/' + BOARD_ID; 
 
 socket.emit('control', {
 	type: 'login',
@@ -31,14 +38,15 @@ function addItem(data){
 			<div class="msg-header">
 				<img src="${info.head}" class="ava" />
 				<span class="whosay">
-
 					${info.id}
+					<span class="n">${zeroPrefix(data.n)}</span>
 				</span>
 			</div>
 			<div class="content">
 				<span class="text">
 					${ data.text }
 				</span>
+				<span class="time">${data.time}</span>
 			</div>
 		</li>
 	`; 
@@ -46,6 +54,10 @@ function addItem(data){
 
 
 	$('#messages').prepend(toAdd);
+}
+
+function zeroPrefix(n){
+	return ('00' + n.toString()).slice(-2); 
 }
 
 function addImg(data){
@@ -56,12 +68,14 @@ function addImg(data){
 			<div class="msg-header">
 				<img src="${info.head}" class="ava" />
 				<span class="whosay">
-
 					${info.id}
+					<span class="n">${zeroPrefix(data.n)}</span>
 				</span>
 			</div>
 			<div class="content">
 				<img src="${data.img}" />
+
+				<span class="time">${data.time}</span>
 			</div>
 		</li>
 	`; 
@@ -78,8 +92,8 @@ function addFile(data){
 			<div class="msg-header">
 				<img src="${info.head}" class="ava" />
 				<span class="whosay">
-
 					${info.id}
+					<span class="n">${zeroPrefix(data.n)}</span>
 				</span>
 			</div>
 			<div class="content file-content">
@@ -96,6 +110,7 @@ function addFile(data){
 						</svg>
 					</div>
 				</a>
+				<span class="time">${data.time}</span>
 			</div>
 		</li>
 	`
@@ -114,11 +129,26 @@ function boardAlert(msg){
 	$('#messages').prepend($(str))
 }
 
-function handleClick(){
+function timeFilter(time){
+	var s = zeroPrefix(time.getSeconds()),
+		m = zeroPrefix(time.getMinutes()), 
+		h = zeroPrefix(time.getHours()); 
 
+	return [h, m, s].join(':'); 
 }
 
-socket.on('chatMsg', function(data){
+function onChatMsg(data){
+	data.time = timeFilter(
+		new Date(data.time)
+	);
+
+	console.groupCollapsed(
+		` %c [${new Date().toLocaleTimeString()}] ChatMsg ${data.type} Recive `,
+		`background: rgb(255, 204, 102);color: #B33;`
+	)
+		console.log(data); 
+	console.groupEnd();
+
 	if (data.type === 'plain'){
 		addItem(data); 	
 	} else if (data.type === 'image'){
@@ -126,32 +156,49 @@ socket.on('chatMsg', function(data){
 	} else if (data.type === 'file'){
 		addFile(data); 
 	}
-});
+}
+
+socket.on('chatMsg', onChatMsg);
 
 socket.on('message', function(msg){
+	console.log(
+		` %c [${new Date().toLocaleTimeString()}] Msg From Server: ${msg} `,
+		'color: #fff; background: #EB4; font-size: 24px;border-radius: 4px;font-family: consolas; line-height: 4em; padding: 1em;'
+	)
 	alert(msg); 
 }); 
 
 socket.on('chatDisconnect', function(who){
 	boardAlert(`&gt;&gt;&gt;&gt; 用户 ${who.id} 已离开本版 &lt;&lt;&lt;&lt;`); 
 	deleteFromUserList(who); 
+
+	console.log(
+		` %c [${new Date().toLocaleTimeString()}] ${who.id} 已离开本版 `,
+		'background-color: #ff6a6a; color: #FFF; font-weight: bolder;'
+	)
 })
+
 socket.on('chatConnect', function(who){
 	boardAlert(`&gt;&gt;&gt;&gt; 用户 ${who.id} 已加入本版 &lt;&lt;&lt;&lt;`); 
-	add2UserList(who)
+	add2UserList(who);
+
+	console.log(
+		` %c [${new Date().toLocaleTimeString()}] ${who.id} 已加入本版 `,
+		'background-color: #ff6a6a; color: #FFF; font-weight: bolder;'
+	)
 })
 
 socket.on('history', function(msgArr){
-	var temp; 
-	console.log('HISTORY', msgArr); 
+	console.groupCollapsed(
+		` %c [${new Date().toLocaleTimeString()}] History Msgs `,
+		`background-color: rgb(240, 240, 255); color: rgb(35, 45, 75);`
+	)
+		console.log(msgArr); 
+	console.groupEnd();
 
 	msgArr.forEach(function(e, idx){
 		setTimeout(() => {
-			// $('#messages').prepend($('<li>').text(e.text));
-			if (e.type === 'plain') addItem(e); 
-			else if (e.type === 'image') addImg(e); 
-			else if (e.type === 'file') addFile(e); 
-
+			onChatMsg(e); 
 		}, idx * 100); 
 	})
 });
@@ -173,8 +220,12 @@ function deleteFromUserList(user){
 }
 
 socket.on('onlineUsers', function(userList){
-	console.log('USERLIST'); 
-	console.log(userList)
+	console.groupCollapsed(
+		` %c [${new Date().toLocaleTimeString()}] UserList `,
+		`background-color: rgb(180, 220, 250); color: rgb(40, 75, 45);`
+	)
+		console.log(userList); 
+	console.groupEnd();
 	
 	userList.map(add2UserList); 
 }); 

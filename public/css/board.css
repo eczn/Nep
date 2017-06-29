@@ -25,6 +25,7 @@
 }
 
 .content {
+	position: relative;	
 	display: block;
 	vertical-align: middle;
 	/*max-width: 500px;*/
@@ -237,4 +238,18 @@
 		transform: scale(0);
 		width: 0px; 
 	}
+}
+
+span.n {
+	font-size: 25px;
+	position: absolute;
+	right: 5%; 
+	opacity: .5; 
+}
+
+.time {
+	position: absolute;
+	font-size: 12px; 
+	right: 5%; 
+	top: 100%; 
 }

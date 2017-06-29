@@ -14,7 +14,7 @@ var boardList = [
 	},
 	{
 		name: 'CHEETS',
-		img: '/img/002.jpg',
+		img: '/img/stars.png',
 		intro: '谈笑风生',
 		msgs: [],
 		users: []
@@ -51,9 +51,11 @@ IO.todo = function(io) {
 
 		IOBoard.on('connection', socket => {
 			console.log('\n\n >>>> CONNECTION'.debug, boardItem.name); 
-			// console.log('>>>> SOC', socket); 
-			let SOCKET_ID = socket.id.split('#')[1]; 
-			let user = {};  
+			console.log(' >>>> IP'.debug, socket.conn.remoteAddress); 
+			let SOCKET_ID = socket.id.split('#')[1]; 			
+			let user = {
+				ip: socket.conn.remoteAddress
+			};  
 
 			// 发历史消息 
 			socket.emit('history', boardItem.msgs);
@@ -66,6 +68,9 @@ IO.todo = function(io) {
 			// On Msg 
 			socket.on('chatMsg', msg => {
 				let userInfo = msg.user.info; 
+				// 楼层 时间 
+				msg.n = boardItem.msgs.length; 
+				msg.time = new Date(); 
 
 				if (msg.type === 'plain'){
 					msg.text = md.render(msg.text);
@@ -105,7 +110,8 @@ IO.todo = function(io) {
 						if (suc) {
 							let temp = {
 								id: userInAuth.id, 
-								head: userInAuth.head
+								head: userInAuth.head,
+								ip: user.ip
 							}
 
 							boardItem.users.push(temp); 
